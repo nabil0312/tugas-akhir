@@ -8,69 +8,95 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen p-4">
+<body class="bg-gray-100 min-h-screen">
 
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto px-4 py-6">
 
     <!-- HEADER -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
 
-        <div>
-            <h1 class="text-3xl font-extrabold text-gray-800">
-                📚 Sistem Peminjaman Ruangan
-            </h1>
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-            <p class="text-gray-500 mt-1 text-sm">
-                Kelola peminjaman ruangan menggunakan RFID & Barcode
-            </p>
-        </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Sistem Peminjaman Ruangan
+                </h1>
 
-        <!-- STATS -->
-        <div class="bg-white rounded-xl shadow px-4 py-3 w-fit">
+                <p class="text-gray-500 mt-2 text-sm">
+                    Kelola peminjaman ruangan dengan sistem RFID dan QR Code
+                </p>
+            </div>
 
-            <p class="text-gray-500 text-xs">
-                Total Ruangan
-            </p>
+            <!-- STATS -->
+            <div class="grid grid-cols-3 gap-3">
 
-            <h2 class="text-2xl font-bold text-indigo-600">
-                {{ $rooms->count() }}
-            </h2>
+                <div class="bg-gray-50 border rounded-xl px-5 py-4 text-center min-w-[120px]">
+                    <p class="text-xs text-gray-500 mb-1">
+                        Total
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        {{ $rooms->count() }}
+                    </h2>
+                </div>
+
+                <div class="bg-green-50 border border-green-100 rounded-xl px-5 py-4 text-center min-w-[120px]">
+                    <p class="text-xs text-green-600 mb-1">
+                        Kosong
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-green-700">
+                        {{ $rooms->where('status','kosong')->count() }}
+                    </h2>
+                </div>
+
+                <div class="bg-red-50 border border-red-100 rounded-xl px-5 py-4 text-center min-w-[120px]">
+                    <p class="text-xs text-red-600 mb-1">
+                        Dipinjam
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-red-700">
+                        {{ $rooms->where('status','dipinjam')->count() }}
+                    </h2>
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
     <!-- MENU -->
-    <div class="flex flex-wrap gap-2 mb-6">
+    <div class="flex flex-wrap gap-3 mb-6">
 
         <a href="/dashboard"
-           class="bg-gray-700 hover:bg-gray-800 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            📋 Semua
+           class="bg-gray-800 hover:bg-black transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Semua
         </a>
 
         <a href="/dashboard?filter=kosong"
-           class="bg-green-500 hover:bg-green-600 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            🔓 Kosong
+           class="bg-green-600 hover:bg-green-700 transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Ruangan Kosong
         </a>
 
         <a href="/dashboard?filter=dipinjam"
-           class="bg-red-500 hover:bg-red-600 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            🔒 Dipinjam
+           class="bg-red-600 hover:bg-red-700 transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Sedang Dipinjam
         </a>
 
         <a href="/riwayat"
-           class="bg-black hover:bg-gray-900 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            📊 Riwayat
+           class="bg-slate-700 hover:bg-slate-800 transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Riwayat
         </a>
 
         <a href="/rfid"
-           class="bg-indigo-600 hover:bg-indigo-700 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            📡 RFID
+           class="bg-indigo-600 hover:bg-indigo-700 transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Peminjaman
         </a>
 
         <a href="/return-scan"
-           class="bg-orange-500 hover:bg-orange-600 transition text-white px-4 py-2 rounded-lg shadow text-sm font-semibold">
-            📷 Pengembalian
+           class="bg-orange-500 hover:bg-orange-600 transition text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            Pengembalian
         </a>
 
     </div>
@@ -78,7 +104,7 @@
     <!-- ALERT -->
     @if(session('success'))
 
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-4 shadow text-sm">
+        <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-4 text-sm">
             {{ session('success') }}
         </div>
 
@@ -86,43 +112,41 @@
 
     @if(session('error'))
 
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 shadow text-sm">
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
             {{ session('error') }}
         </div>
 
     @endif
 
-    <!-- CARD -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+    <!-- ROOM GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
 
         @foreach($rooms as $room)
 
-        <div class="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 p-3">
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-300">
 
-            <!-- HEADER CARD -->
-            <div class="flex items-start justify-between mb-3">
+            <!-- TOP -->
+            <div class="flex items-start justify-between mb-5">
 
                 <div>
-
-                    <h2 class="text-sm font-bold text-gray-800 leading-tight">
+                    <h2 class="text-lg font-bold text-gray-800">
                         {{ $room->nama_ruangan }}
                     </h2>
 
-                    <p class="text-[11px] text-gray-400">
-                        ID #{{ $room->id }}
+                    <p class="text-xs text-gray-400 mt-1">
+                        ID Ruangan #{{ $room->id }}
                     </p>
-
                 </div>
 
                 @if($room->status == 'kosong')
 
-                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-[10px] font-bold">
+                    <span class="bg-green-100 text-green-700 text-[11px] font-semibold px-3 py-1 rounded-full">
                         Kosong
                     </span>
 
                 @else
 
-                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-[10px] font-bold">
+                    <span class="bg-red-100 text-red-700 text-[11px] font-semibold px-3 py-1 rounded-full">
                         Dipinjam
                     </span>
 
@@ -131,37 +155,25 @@
             </div>
 
             <!-- STATUS -->
-            <div class="bg-gray-50 rounded-lg p-2 border mb-3">
+            <div class="border rounded-xl p-4 mb-5 bg-gray-50">
 
-                <div class="flex justify-between items-center">
+                <p class="text-xs text-gray-500 mb-2">
+                    Status Ruangan
+                </p>
 
-                    <div>
+                @if($room->status == 'kosong')
 
-                        <p class="text-[10px] text-gray-500">
-                            Status
-                        </p>
+                    <h3 class="text-green-600 font-bold text-lg">
+                        Tersedia
+                    </h3>
 
-                        <h3 class="text-xs font-bold
-                            {{ $room->status == 'kosong'
-                                ? 'text-green-600'
-                                : 'text-red-600'
-                            }}">
-                            {{ ucfirst($room->status) }}
-                        </h3>
+                @else
 
-                    </div>
+                    <h3 class="text-red-600 font-bold text-lg">
+                        Tidak Tersedia
+                    </h3>
 
-                    <div class="text-xl">
-
-                        @if($room->status == 'kosong')
-                            🔓
-                        @else
-                            🔒
-                        @endif
-
-                    </div>
-
-                </div>
+                @endif
 
             </div>
 
@@ -169,14 +181,14 @@
             @if($room->status == 'kosong')
 
                 <a href="/rfid"
-                   class="block text-center bg-blue-500 hover:bg-blue-600 transition text-white px-3 py-2 rounded-lg text-xs font-bold">
-                    Pinjam
+                   class="block text-center bg-indigo-600 hover:bg-indigo-700 transition text-white py-3 rounded-xl text-sm font-semibold">
+                    Pinjam Ruangan
                 </a>
 
             @else
 
                 <a href="/return-scan"
-                   class="block text-center bg-red-500 hover:bg-red-600 transition text-white px-3 py-2 rounded-lg text-xs font-bold">
+                   class="block text-center bg-red-500 hover:bg-red-600 transition text-white py-3 rounded-xl text-sm font-semibold">
                     Kembalikan
                 </a>
 

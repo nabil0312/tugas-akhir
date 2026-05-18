@@ -1,63 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Struk Peminjaman</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receipt</title>
 
     @vite('resources/css/app.css')
+
+    <style>
+
+        @page {
+            size: 80mm auto;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .receipt {
+            width: 220px;
+            padding: 10px;
+            margin: auto;
+        }
+
+        @media print {
+
+            html,
+            body {
+                width: 80mm;
+                height: auto;
+                overflow: hidden;
+            }
+
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-gray-100 min-h-screen flex justify-center items-center">
+<body onload="window.print()">
 
-<div class="bg-white w-[320px] p-6 rounded-xl shadow-lg text-center">
+<div class="receipt text-center">
 
-    <h1 class="text-xl font-bold mb-4">
-        STRUK PEMINJAMAN
+    <!-- TITLE -->
+    <h1 class="text-sm font-bold">
+        📚 SISTEM PEMINJAMAN
     </h1>
 
-    <hr class="mb-4">
-
-    <div class="text-left space-y-2 text-sm">
-
-        <p>
-            <strong>Nama:</strong>
-            {{ $borrow->borrower_name }}
-        </p>
-
-        <p>
-            <strong>Ruangan:</strong>
-            {{ $borrow->room->nama_ruangan }}
-        </p>
-
-        <p>
-            <strong>Waktu:</strong>
-            {{ $borrow->borrowed_at }}
-        </p>
-
-    </div>
-
-    <div class="flex justify-center my-5">
-
-        {!! QrCode::size(180)->generate($borrow->id) !!}
-
-    </div>
-
-    <p class="text-sm text-gray-500">
-        Scan QR ini untuk pengembalian ruangan
+    <p class="text-[10px] text-gray-500 mb-2">
+        Struk Peminjaman Ruangan
     </p>
 
-    <hr class="my-4">
+    <hr class="mb-2 border-black">
 
-    <p class="text-xs text-gray-400">
-        Terima kasih
+    <!-- INFO -->
+    <div class="text-left space-y-1 text-[11px]">
+
+        <p>
+            <strong>Nama :</strong>
+            {{ $borrowing->borrower_name }}
+        </p>
+
+        <p>
+            <strong>Ruangan :</strong>
+            {{ $borrowing->room->nama_ruangan ?? '-' }}
+        </p>
+
+        <p>
+            <strong>Waktu :</strong>
+            {{ $borrowing->borrowed_at }}
+        </p>
+
+        <p>
+            <strong>Kelas :</strong>
+            {{ $borrowing->class }}
+        </p>
+
+
+    </div>
+
+    <!-- QR -->
+    <div class="flex justify-center my-3">
+
+        {!! QrCode::size(80)->generate($borrowing->id) !!}
+
+    </div>
+
+    <!-- TEXT -->
+    <p class="text-[10px] text-gray-500">
+        Scan QR untuk pengembalian
+    </p>
+
+    <hr class="my-2 border-black">
+
+    <!-- FOOTER -->
+    <p class="text-[9px] text-gray-400">
+        Terima kasih telah menggunakan sistem peminjaman
     </p>
 
 </div>
-
-<script>
-
-window.print();
-
-</script>
 
 </body>
 </html>

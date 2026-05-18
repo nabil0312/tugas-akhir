@@ -27,6 +27,22 @@
     <form action="/rfid" method="POST">
         @csrf
 
+        <!-- KOLOM NAMA -->
+        <div class="mb-4">
+            <label class="block mb-2 font-semibold">
+                Nama Peminjam
+            </label>
+
+            <input
+                type="text"
+                name="nama"
+                placeholder="Masukkan nama..."
+                class="w-full border p-3 rounded-xl"
+                required
+            >
+        </div>
+
+        <!-- RFID -->
         <div class="mb-4">
             <label class="block mb-2 font-semibold">
                 Tempel Kartu RFID
@@ -38,9 +54,11 @@
                 placeholder="Scan RFID..."
                 autofocus
                 class="w-full border p-3 rounded-xl"
+                required
             >
         </div>
 
+        <!-- ROOM -->
         <div class="mb-6">
             <label class="block mb-2 font-semibold">
                 Pilih Ruangan

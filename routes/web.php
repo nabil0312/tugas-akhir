@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Room;
 use App\Models\Borrowing;
+use App\Http\Controllers\BorrowingController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -73,10 +75,14 @@ Route::post('/rfid', function (Request $request) {
 
     if (!$user) {
 
-        return back()->with(
-            'error',
-            'RFID tidak dikenal'
-        );
+        $user = User::create([
+
+            'name' => $request->nama,
+            'email' => 'user' . rand(1000,9999) . '@gmail.com',
+            'password' => bcrypt('123456'),
+            'rfid_uid' => $request->rfid_uid
+
+        ]);
 
     }
 
@@ -103,10 +109,14 @@ Route::post('/rfid', function (Request $request) {
     }
 
     // SIMPAN PEMINJAMAN
-    $borrow = Borrowing::create([
+    $borrowing = Borrowing::create([
 
+        'user_id' => $user->id,
         'room_id' => $room->id,
-        'borrower_name' => $user->name,
+
+        // INI YANG PENTING
+        'borrower_name' => $request->nama,
+
         'class' => 'XI RPL',
         'purpose' => 'Peminjaman RFID',
         'borrowed_at' => now(),
@@ -122,7 +132,7 @@ Route::post('/rfid', function (Request $request) {
     ]);
 
     // TAMPILKAN STRUK
-    return view('receipt', compact('borrow'));
+    return view('receipt', compact('borrowing'));
 
 });
 
@@ -171,5 +181,12 @@ Route::post('/return-scan', function () {
         'success',
         'Ruangan berhasil dikembalikan'
     );
+
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::post('/pinjam/{id}', [BorrowingController::class, 'pinjam']);
+    Route::post('/kembali/{id}', [BorrowingController::class, 'kembali']);
 
 });
