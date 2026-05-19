@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Receipt</title>
-
     @vite('resources/css/app.css')
 
     <style>
-
         @page {
             size: 80mm auto;
             margin: 0;
@@ -30,20 +26,14 @@
         }
 
         @media print {
-
-            html,
-            body {
+            html, body {
                 width: 80mm;
                 height: auto;
                 overflow: hidden;
             }
-
         }
-
     </style>
-
 </head>
-
 <body onload="window.print()">
 
 <div class="receipt text-center">
@@ -73,23 +63,20 @@
         </p>
 
         <p>
-            <strong>Waktu :</strong>
-            {{ $borrowing->borrowed_at }}
+            <strong>Waktu Pinjam :</strong>
+            {{ $borrowing->start_time }}
         </p>
 
         <p>
-            <strong>Kelas :</strong>
-            {{ $borrowing->class }}
+            <strong>Batas Waktu :</strong>
+            {{ $borrowing->end_time }}
         </p>
-
 
     </div>
 
     <!-- QR -->
     <div class="flex justify-center my-3">
-
         {!! QrCode::size(80)->generate($borrowing->id) !!}
-
     </div>
 
     <!-- TEXT -->
@@ -101,9 +88,20 @@
 
     <!-- FOOTER -->
     <p class="text-[9px] text-gray-400">
-        Terima kasih telah menggunakan sistem peminjaman
+        Terima kasih telah menggunakan sistem peminjaman. Struk jangan sampai hilang agar dapat melakukan pengembalian ruangan
+    </p>
+    <p class="text-[10px] font-bold text-red-600 mt-2 border border-red-600 p-1 border-dashed">
+        ⚠️ PERINGATAN:<br>
+        Denda keterlambatan pengembalian Rp. 10.000 / jam
     </p>
 
+</div>
+
+<div class="text-center mt-4 print:hidden">
+    <a href="/dashboard"
+       style="display:inline-block; background:#2563eb; color:#fff; padding:10px 24px; border-radius:8px; text-decoration:none; font-size:14px; font-family:Arial,sans-serif;">
+        ← Kembali ke Dashboard
+    </a>
 </div>
 
 </body>

@@ -14,6 +14,8 @@ class Borrowing extends Model
     'purpose',
     'borrowed_at',
     'returned_at',
+    'start_time',
+    'end_time',
     'status'
 ];
     public function room()

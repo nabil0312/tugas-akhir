@@ -119,6 +119,8 @@ Route::post('/rfid', function (Request $request) {
 
         'class' => 'XI RPL',
         'purpose' => 'Peminjaman RFID',
+        'start_time' => $request->start_time,
+        'end_time' => $request->end_time,
         'borrowed_at' => now(),
         'status' => 'dipinjam'
 
@@ -131,7 +133,20 @@ Route::post('/rfid', function (Request $request) {
 
     ]);
 
-    // TAMPILKAN STRUK
+    // KEMBALI KE HALAMAN RFID DENGAN PESAN SUKSES
+    return back()->with([
+        'success' => 'Ruangan "' . $room->nama_ruangan . '" berhasil dipinjam atas nama ' . $request->nama,
+        'borrowing_id' => $borrowing->id
+    ]);
+
+});
+
+
+
+Route::get('/receipt/{id}', function ($id) {
+
+    $borrowing = Borrowing::with('room')->findOrFail($id);
+
     return view('receipt', compact('borrowing'));
 
 });
@@ -179,7 +194,7 @@ Route::post('/return-scan', function () {
 
     return redirect('/dashboard')->with(
         'success',
-        'Ruangan berhasil dikembalikan'
+        'Ruangan "' . $borrow->room->nama_ruangan . '" berhasil dikembalikan'
     );
 
 });
@@ -188,5 +203,17 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/pinjam/{id}', [BorrowingController::class, 'pinjam']);
     Route::post('/kembali/{id}', [BorrowingController::class, 'kembali']);
+
+});
+
+Route::delete('/riwayat/{id}', function ($id) {
+
+    $history = Borrowing::find($id);
+
+    if ($history) {
+        $history->delete();
+    }
+
+    return back()->with('success', 'Riwayat berhasil dihapus');
 
 });

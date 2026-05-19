@@ -1,88 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scan Pengembalian</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen flex justify-center items-center p-4">
+<body class="bg-dark-950 min-h-screen flex justify-center items-center p-4">
 
-<div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md">
+<div class="card p-8 sm:p-10 rounded-2xl w-full max-w-md fade-in" id="return-form-container">
 
-    <!-- HEADER -->
-    <div class="text-center mb-6">
+    <a href="/dashboard" class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-400 transition text-sm font-medium mb-6">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
+    </a>
 
-        <h1 class="text-3xl font-extrabold text-gray-800 mb-2">
-            🔫 Scan Barcode Struk
-        </h1>
-
-        <p class="text-gray-500 text-sm">
-            Scan barcode menggunakan scanner untuk mengembalikan ruangan
-        </p>
-
-    </div>
-
-    <!-- ALERT -->
-    @if(session('error'))
-
-        <div class="bg-red-100 border border-red-300 text-red-700 p-3 rounded-xl mb-4 text-sm">
-            ❌ {{ session('error') }}
+    <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+            <i data-lucide="qr-code" class="w-5 h-5 text-amber-400"></i>
         </div>
+        <h1 class="text-2xl font-bold text-white">Scan Barcode</h1>
+    </div>
+    <p class="text-slate-500 mb-8 text-sm">Scan barcode pada struk untuk mengembalikan ruangan</p>
 
+    @if(session('error'))
+        <div class="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-3.5 rounded-xl mb-4 text-sm font-medium flex items-center gap-2" id="alert-error">
+            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+            {{ session('error') }}
+        </div>
     @endif
 
     @if(session('success'))
-
-        <div class="bg-green-100 border border-green-300 text-green-700 p-3 rounded-xl mb-4 text-sm">
-            ✅ {{ session('success') }}
+        <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-4 p-4 flex items-center gap-2 text-emerald-400 font-medium text-sm" id="alert-success">
+            <i data-lucide="check-circle-2" class="w-5 h-5 shrink-0"></i>
+            {{ session('success') }}
         </div>
-
     @endif
 
-    <!-- FORM -->
-    <form method="POST" action="/return-scan">
-
+    <form method="POST" action="/return-scan" id="return-form">
         @csrf
 
-        <!-- INPUT SCANNER -->
-        <div class="mb-5">
-
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Barcode / QR Code
+        <div class="mb-6">
+            <label class="flex items-center gap-2 mb-2 font-medium text-sm text-slate-400" for="kode">
+                <i data-lucide="scan-barcode" class="w-4 h-4"></i> Barcode / QR Code
             </label>
-
-            <input
-                type="text"
-                name="kode"
-                autofocus
-                autocomplete="off"
+            <input type="text" name="kode" id="kode" autofocus autocomplete="off"
                 placeholder="Scan barcode di sini..."
-                class="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-0 rounded-2xl px-4 py-4 text-lg font-bold text-center outline-none"
-            >
-
+                onkeydown="return event.key != 'Enter';"
+                class="w-full bg-dark-800 border border-glass-border text-white placeholder-slate-600 focus:border-amber-500 focus:outline-none rounded-xl px-4 py-4 text-lg font-semibold text-center transition">
         </div>
 
-        <!-- BUTTON -->
-        <button
-            type="submit"
-            class="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-4 rounded-2xl font-bold text-lg shadow-lg"
-        >
-            Kembalikan Ruangan
+        <button type="submit" id="btn-submit"
+            class="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 transition text-white py-3.5 rounded-xl font-semibold text-base">
+            <i data-lucide="undo-2" class="w-4 h-4"></i> Kembalikan Ruangan
         </button>
-
     </form>
 
-    <!-- INFO -->
-    <div class="mt-6 text-center text-sm text-gray-400">
-
-        <p>
-            💡 Arahkan scanner ke QR pada struk
-        </p>
-
+    <div class="mt-6 flex items-center justify-center gap-2 text-slate-600 text-sm">
+        <i data-lucide="info" class="w-4 h-4"></i>
+        <p>Arahkan scanner ke QR pada struk</p>
     </div>
 
 </div>
 
+<script>lucide.createIcons();</script>
 </body>
 </html>
