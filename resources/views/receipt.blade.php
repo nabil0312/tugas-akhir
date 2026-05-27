@@ -17,19 +17,21 @@
             padding: 0;
             background: white;
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
         }
 
         .receipt {
-            width: 220px;
-            padding: 10px;
-            margin: auto;
+            width: 72mm; /* Leave a little margin for 80mm paper */
+            padding: 10px 0;
+            margin: 0 auto;
         }
 
         @media print {
             html, body {
-                width: 80mm;
-                height: auto;
-                overflow: hidden;
+                width: 100%;
+                margin: 0;
+                padding: 0;
             }
         }
     </style>
